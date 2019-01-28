@@ -1,6 +1,7 @@
 version: '3'
 
 volumes:
+  notary-db:
   treehub-db:
   treehub-objects:
 
@@ -40,3 +41,36 @@ services:
     depends_on:
       - treehub-db
       - kafka
+
+  notary-db:
+    image: mariadb:10.3.2
+    volumes:
+      - ./notary/mysql-initdb.d:/docker-entrypoint-initdb.d
+      - notary-db:/var/lib/mysql
+    environment:
+      TERM: dumb
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    command: mysqld --innodb_file_per_table
+
+  notary-signer:
+    image: foundriesio/notary:signer-0.6.1
+    entrypoint: /usr/bin/env sh
+    command: -c "./migrations/migrate.sh && notary-signer -config=/fixtures/signer-config.json"
+    environment:
+      DB_URL: "mysql://signer@tcp(notary-db:3306)/notarysigner?parseTime=True"
+    volumes:
+      - ./notary/fixtures:/fixtures
+    depends_on:
+      - notary-db
+
+  notary-server:
+    image: foundriesio/notary:server-0.6.1
+    entrypoint: /usr/bin/env sh
+    command: -c "./migrations/migrate.sh && notary-server -config=/fixtures/server-config.json"
+    environment:
+      DB_URL: "mysql://server@tcp(notary-db:3306)/notaryserver?parseTime=True"
+    volumes:
+      - ./notary/fixtures:/fixtures
+    depends_on:
+      - notary-db
+      - notary-signer
