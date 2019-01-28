@@ -74,3 +74,10 @@ services:
     depends_on:
       - notary-db
       - notary-signer
+
+  public-web:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:80
