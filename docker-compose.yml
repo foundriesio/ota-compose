@@ -96,3 +96,10 @@ services:
     depends_on:
       - ota-ce-db
       - kafka
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:80
