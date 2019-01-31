@@ -11,21 +11,20 @@ services:
   ota-ce-db:
     image: mariadb:10.3.2
     command: --max_connections=120
-    environment:
-      MYSQL_DATABASE: treehub
-      MYSQL_USER: treehub
-      MYSQL_PASSWORD: treehub
-      MYSQL_ROOT_PASSWORD: randomRoot
+    env_file:
+      - ./.secrets
     volumes:
       - ota-ce-db:/var/lib/mysql
+      - ./ota-ce-initialize.sql:/docker-entrypoint-initdb.d/ota-ce-initialize.sql
 
   treehub:
     image: advancedtelematic/treehub:0.1.27
     user: root
+    env_file:
+      - ./.secrets
     environment:
       AUTH_PROTOCOL: none
       BIND_PORT: '9001'
-      DB_MIGRATE: 'true'
       DB_URL: jdbc:mariadb://ota-ce-db:3306/treehub
       KAFKA_HOST: kafka:9092
       REPORT_METRICS: "false"
