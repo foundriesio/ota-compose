@@ -1,14 +1,14 @@
 version: '3'
 
 volumes:
-  treehub-db:
+  ota-ce-db:
   treehub-objects:
 
 services:
   kafka:
     image: spotify/kafka
 
-  treehub-db:
+  ota-ce-db:
     image: mariadb:10.3.2
     command: --max_connections=120
     environment:
@@ -17,7 +17,7 @@ services:
       MYSQL_PASSWORD: treehub
       MYSQL_ROOT_PASSWORD: randomRoot
     volumes:
-      - treehub-db:/var/lib/mysql
+      - ota-ce-db:/var/lib/mysql
 
   treehub:
     image: advancedtelematic/treehub:0.1.27
@@ -26,7 +26,7 @@ services:
       AUTH_PROTOCOL: none
       BIND_PORT: '9001'
       DB_MIGRATE: 'true'
-      DB_URL: jdbc:mariadb://treehub-db:3306/treehub
+      DB_URL: jdbc:mariadb://ota-ce-db:3306/treehub
       KAFKA_HOST: kafka:9092
       REPORT_METRICS: "false"
       TREEHUB_LOCAL_STORE_PATH: "/treehub-objects"
@@ -35,8 +35,8 @@ services:
       - treehub-objects:/treehub-objects/object-storage
       - ./wait-for:/wait-for
       - ./treehub-run.sh:/run.sh
-    command: "/wait-for treehub-db:3306 -- /run.sh"
+    command: "/wait-for ota-ce-db:3306 -- /run.sh"
     entrypoint: ""
     depends_on:
-      - treehub-db
+      - ota-ce-db
       - kafka
