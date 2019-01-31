@@ -25,3 +25,8 @@ $ ./populate-faux-data.sh
 # Step 5: sign the hash in TUF
 $ BUILD=XX OSTREE_HASH=XX HWID=XX ./tufrepo-add-build.sh
 ~~~
+
+When you get sick of it or want to try from scratch run:
+~~~
+$ ./cleanup.sh
+~~~
