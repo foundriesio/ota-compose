@@ -1,5 +1,6 @@
 #!/bin/sh -e
 
+
 this=$(readlink -f $0)
 data="${NOTARY_DATA-$(dirname $this)/notary-data}"
 collection="${NOTARY_COLLECTION-hub.foundries.io/lmp}"
@@ -7,7 +8,11 @@ collection="${NOTARY_COLLECTION-hub.foundries.io/lmp}"
 [ -d $data ] || mkdir $data
 
 if ! which garage-push >/dev/null 2>&1; then
-	echo "Calling via docker with proper tooling"
+	echo "=$(date) Generating root key compatible with aktualizr"
+	# ed25519 is the only type supported by both Notary and aktualizr
+	openssl genpkey -algorithm ed25519 -outform PEM -out $data/root-pkey -aes256
+
+	echo "=$(date) Calling via docker with proper tooling"
 	exec docker run -it --rm \
 		--network ota-compose_default \
 		-v $this:$this \
@@ -26,4 +31,5 @@ if [ ! -f $data/notary ] ; then
 fi
 
 $data/notary -v -d $data/trust --tlscacert /fixtures/root-ca.crt -s https://notary-server \
+	--rootkey $data/root-pkey \
 	init $collection
