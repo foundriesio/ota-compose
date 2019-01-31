@@ -14,5 +14,9 @@ MYSQL_ROOT_PASSWORD=$(openssl rand -base64 16)
 DB_MIGRATE=true
 DB_USER=ota-ce
 DB_PASSWORD=
+
+# used by tuf-keyserver
+DB_ENCRYPTION_SALT=$(openssl rand -base64 8)
+DB_ENCRYPTION_PASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w64 | head -n1)
 EOF
 chmod 440 $here/.secrets

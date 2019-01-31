@@ -39,3 +39,60 @@ services:
     depends_on:
       - ota-ce-db
       - kafka
+
+  tuf-keyserver-daemon:
+    image: advancedtelematic/tuf-keyserver:0.5.0-34-g0f489ef
+    env_file:
+      - ./.secrets
+    environment:
+      BIND_PORT: '9001'
+      DB_URL: jdbc:mariadb://ota-ce-db:3306/tuf_keyserver
+      KAFKA_HOST: kafka:9092
+      REPORT_METRICS: "false"
+    volumes:
+      - ./wait-for:/wait-for
+    command: "/wait-for ota-ce-db:3306 -- /opt/keyserver/bin/keyserver -main com.advancedtelematic.tuf.keyserver.daemon.KeyGenerationDaemon"
+    entrypoint: ""
+    depends_on:
+      - ota-ce-db
+      - kafka
+
+  tuf-keyserver:
+    image: advancedtelematic/tuf-keyserver:0.5.0-34-g0f489ef
+    env_file:
+      - ./.secrets
+    environment:
+      BIND_PORT: '9001'
+      DB_URL: jdbc:mariadb://ota-ce-db:3306/tuf_keyserver
+      KAFKA_HOST: kafka:9092
+      REPORT_METRICS: "false"
+    volumes:
+      - ./wait-for:/wait-for
+    command: "/wait-for ota-ce-db:3306 -- /opt/keyserver/bin/keyserver -main com.advancedtelematic.tuf.keyserver.Boot"
+    entrypoint: ""
+    depends_on:
+      - ota-ce-db
+      - kafka
+
+  tuf-reposerver:
+    image: advancedtelematic/tuf-reposerver:0.5.0-34-g0f489ef
+    env_file:
+      - ./.secrets
+    environment:
+      AUTH_PROTOCOL: none
+      BIND_PORT: '9001'
+      DB_URL: jdbc:mariadb://ota-ce-db:3306/tuf_reposerver
+      KAFKA_HOST: kafka:9092
+      REPORT_METRICS: "false"
+      LOCAL_STORAGE_ROOT: /tmp/tuf-targets
+      STORAGE_TYPE: local
+      TUF_KEYSERVER_HOST: tuf-keyserver
+      TUF_KEYSERVER_PORT: "9001"
+      TUF_REPOSERVER_SIZE_LIMIT: "536870912"
+    volumes:
+      - ./wait-for:/wait-for
+    command: "/wait-for ota-ce-db:3306 -- /opt/reposerver/bin/reposerver"
+    entrypoint: ""
+    depends_on:
+      - ota-ce-db
+      - kafka
