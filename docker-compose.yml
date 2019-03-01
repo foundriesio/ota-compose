@@ -3,6 +3,7 @@ version: '3'
 volumes:
   ota-ce-db:
   treehub-objects:
+  tuf-targets:
 
 services:
   kafka:
@@ -84,13 +85,15 @@ services:
       DB_URL: jdbc:mariadb://ota-ce-db:3306/tuf_reposerver
       KAFKA_HOST: kafka:9092
       REPORT_METRICS: "false"
-      LOCAL_STORAGE_ROOT: /tmp/tuf-targets
+      LOCAL_STORAGE_ROOT: /tuf-targets
       STORAGE_TYPE: local
       TUF_KEYSERVER_HOST: tuf-keyserver
       TUF_KEYSERVER_PORT: "9001"
       TUF_REPOSERVER_SIZE_LIMIT: "536870912"
     volumes:
       - ./wait-for:/wait-for
+      - tuf-targets:/tuf-targets
+
     command: "/wait-for ota-ce-db:3306 -- /opt/reposerver/bin/reposerver"
     entrypoint: ""
     depends_on:
