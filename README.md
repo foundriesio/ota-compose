@@ -9,13 +9,19 @@ The motivation for this is twofold:
 ## Getting Started
 
 ~~~
+# Step 0: create secret creds needed for all services
+$ ./docker-compose-initialize.sh
+
 # Step 1: start up the service
 $ docker-compose up
+or docker-compose -f docker-compose.yml -f uptane.yml up # for uptane support
 
 # Step 2: wait for things to be "healthy" (about 1 minute):
+# if you are running uptane then set UPTANE=1 when running:
 $ ./docker-compose-health.sh
 
 # Step 3: generate the TUF credentials
+# if you are running uptane then set UPTANE=1 when running:
 $ ./tufrepo-initialize.sh
 $ ./creds-data/mk-credentials-zip   # creates credentials.zip
 

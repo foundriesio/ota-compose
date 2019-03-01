@@ -16,6 +16,7 @@ fi
 
 echo "=$(date) Installing prereqs"
 apk add --no-cache curl jq zip | sed 's/^/|  /'
+apk upgrade libcurl
 
 function curl_() {
 	error_msg=$1
@@ -32,13 +33,17 @@ function curl_() {
 }
 
 echo "=$(date) Creating "default" namespace"
-curl_ "Error creating namespace:" -v -d default http://tuf-reposerver:9001/api/v1/user_repo
+curl_ "Error creating namespace:" -d default http://tuf-reposerver:9001/api/v1/user_repo
 id=$(cat /tmp/resp | tr -d  \")
 echo "=$(date) Namespace ID is $id"
+echo "default = $id" >> "$data/namespaces"
+
+[ -z $UPTANE ] || curl_ -d "${namespace}" http://director:9001/api/v1/admin/repo
 
 echo "=$(date) Waiting for keys"
 sleep 5
 curl_ "Error finding TUF Keys:" http://tuf-keyserver:9001/api/v1/root/$id
+
 
 keys=$(curl  http://tuf-keyserver:9001/api/v1/root/$id/keys/targets/pairs)
 echo ${keys} | jq '.[0] | {keytype, keyval: {public: .keyval.public}}'   > "$data/targets.pub"

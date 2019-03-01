@@ -30,5 +30,6 @@ health tuf-keyserver-daemon
 health tuf-keyserver
 health tuf-reposerver
 [ -z $UPTANE ] || health director-daemon
+[ -z $UPTANE ] || health director
 
 exit $failed

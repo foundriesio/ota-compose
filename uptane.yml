@@ -21,3 +21,24 @@ services:
     depends_on:
       - ota-ce-db
       - tuf-keyserver
+
+  director:
+    image: advancedtelematic/director:0.6.3-2-g60998a6
+    env_file:
+      - ./.secrets
+    environment:
+      BIND_PORT: '9001'
+      DB_URL: jdbc:mariadb://ota-ce-db:3306/director
+      KAFKA_HOST: kafka:9092
+      REPORT_METRICS: "false"
+      TUF_KEYSERVER_HOST: tuf-keyserver
+      TUF_KEYSERVER_PORT: "9001"
+      TUF_REPOSERVER_HOST: tuf-reposerver
+      TUF_REPOSERVER_PORT: "9001"
+    volumes:
+      - ./wait-for:/wait-for
+    command: "/wait-for ota-ce-db:3306 -- /opt/director/bin/director"
+    entrypoint: ""
+    depends_on:
+      - ota-ce-db
+      - director-daemon
