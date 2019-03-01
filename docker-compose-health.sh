@@ -11,6 +11,7 @@ if [ -z "$INDOCKER" ] ; then
 		-v$this:$this \
 		-e INDOCKER=1 \
 		-e OSTREE_DATA=$OSTREE_DATA \
+		-e UPTANE=$UPTANE \
 		hub.foundries.io/aktualizr $this
 fi
 
@@ -28,5 +29,6 @@ health treehub
 health tuf-keyserver-daemon
 health tuf-keyserver
 health tuf-reposerver
+[ -z $UPTANE ] || health director-daemon
 
 exit $failed
