@@ -11,3 +11,6 @@ GRANT ALL PRIVILEGES ON `tuf_reposerver`.* TO "ota-ce"@"%";
 
 CREATE DATABASE IF NOT EXISTS `director`;
 GRANT ALL PRIVILEGES ON `director`.* TO "ota-ce"@"%";
+
+CREATE DATABASE IF NOT EXISTS `device-registry`;
+GRANT ALL PRIVILEGES ON `device-registry`.* TO "ota-ce"@"%";

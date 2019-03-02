@@ -42,3 +42,21 @@ services:
     depends_on:
       - ota-ce-db
       - director-daemon
+
+  device-registry:
+    image: advancedtelematic/device-registry:0.2.1-53-gd9c9366
+    env_file:
+      - ./.secrets
+    environment:
+      AUTH_PROTOCOL: none
+      BIND_HOST: '0.0.0.0'
+      BIND_PORT: '9001'
+      DB_URL: jdbc:mariadb://ota-ce-db:3306/device-registry
+      KAFKA_HOST: kafka:9092
+      REPORT_METRICS: "false"
+    volumes:
+      - ./wait-for:/wait-for
+    command: "/wait-for ota-ce-db:3306 -- /opt/docker/bin/device-registry"
+    entrypoint: ""
+    depends_on:
+      - ota-ce-db
