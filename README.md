@@ -12,6 +12,9 @@ The motivation for this is twofold:
 # Step 0: create secret creds needed for all services
 $ ./docker-compose-initialize.sh
 
+# if using uptane:
+$ SERVER_NAME=<hostname this is running on> ./device-registry-initialize.sh
+
 # Step 1: start up the service
 $ docker-compose up
 or docker-compose -f docker-compose.yml -f uptane.yml up # for uptane support
