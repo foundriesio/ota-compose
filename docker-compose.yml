@@ -52,7 +52,7 @@ services:
       REPORT_METRICS: "false"
     volumes:
       - ./wait-for:/wait-for
-    command: "/wait-for ota-ce-db:3306 -- /opt/keyserver/bin/keyserver -main com.advancedtelematic.tuf.keyserver.daemon.KeyGenerationDaemon"
+    command: "/wait-for ota-ce-db:3306 -- /opt/keyserver/bin/keyserver -DrootLevel=warn -main com.advancedtelematic.tuf.keyserver.daemon.KeyGenerationDaemon"
     entrypoint: ""
     depends_on:
       - ota-ce-db

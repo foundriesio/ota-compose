@@ -16,7 +16,7 @@ services:
       TUF_REPOSERVER_PORT: "9001"
     volumes:
       - ./wait-for:/wait-for
-    command: "/wait-for ota-ce-db:3306 -- /opt/director/bin/daemon-boot"
+    command: "/wait-for ota-ce-db:3306 -- /opt/director/bin/daemon-boot -DrootLevel=warn"
     entrypoint: ""
     depends_on:
       - ota-ce-db
