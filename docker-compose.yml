@@ -104,5 +104,9 @@ services:
     image: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./creds-data/server_keys/server.chain.pem:/server_keys/server.chain.pem:ro
+      - ./creds-data/server_keys/server.key:/server_keys/server.key:ro
+      - ./creds-data/server_keys/devices/ca.crt:/server_keys/ca.crt:ro
     ports:
       - 8080:80
+      - 8443:8443
