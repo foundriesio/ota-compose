@@ -67,6 +67,21 @@ keyUsage=critical, digitalSignature
 extendedKeyUsage=critical, clientAuth
 EOF
 
+cat >$keys/conf/device_ca.cnf <<EOF
+[req]
+prompt = no
+distinguished_name = dn
+x509_extensions = ext
+
+[dn]
+CN = ota-devices-CA
+
+[ext]
+basicConstraints=CA:TRUE
+keyUsage = keyCertSign
+extendedKeyUsage = critical, clientAuth
+EOF
+
 echo "=$(date) Creating server CA"
 openssl ecparam -genkey -name prime256v1 | openssl ec -out ca.key
 openssl req -new -x509 -days 3650 -config conf/server_ca.cnf -key ca.key -out server_ca.pem
@@ -84,4 +99,4 @@ mkdir devices
 cd devices
 echo "=$(date) Creating devices CA"
 openssl ecparam -genkey -name prime256v1 | openssl ec -out ca.key
-openssl req -new -x509 -days 3650 -key ca.key -out ca.crt
+openssl req -new -x509 -days 3650 -key ca.key -out ca.crt -config ../conf/device_ca.cnf
