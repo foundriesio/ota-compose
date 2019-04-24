@@ -15,6 +15,9 @@ $ RELEASE=43 PLATFORM=intel-corei7-64 ./provision
 # Deployment with full Uptane
 $ RELEASE=43 PLATFORM=intel-corei7-64 SERVER_NAME=<ota-ce.example.com> UPTANE=1 ./provision.sh
 
+# If using Uptane, new devices can be created with:
+DEVICE_ID=<name> ./scripts/device-registry-add.sh
+
 ~~~
 
 When you get sick of it or want to try from scratch run:
