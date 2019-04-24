@@ -38,7 +38,7 @@ id=$(cat /tmp/resp | tr -d  \")
 echo "=$(date) Namespace ID is $id"
 echo "default = $id" >> "$data/namespaces"
 
-[ -z $UPTANE ] || curl_ -d "${namespace}" http://director:9001/api/v1/admin/repo
+[ -z $UPTANE ] || curl_ "Creating director repo" -d "${namespace}" http://director:9001/api/v1/admin/repo
 
 echo "=$(date) Waiting for keys"
 sleep 5
