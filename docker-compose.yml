@@ -10,8 +10,8 @@ services:
     image: spotify/kafka
 
   ota-ce-db:
-    image: mariadb:10.3.2
-    command: --max_connections=120
+    image: mariadb:10.3.14
+    command: --max_connections=200
     env_file:
       - ./.secrets
     volumes:
@@ -42,7 +42,7 @@ services:
       - kafka
 
   tuf-keyserver-daemon:
-    image: advancedtelematic/tuf-keyserver:0.5.0-34-g0f489ef
+    image: advancedtelematic/tuf-keyserver:0.6.0-18-g5b8b259
     env_file:
       - ./.secrets
     environment:
@@ -59,7 +59,7 @@ services:
       - kafka
 
   tuf-keyserver:
-    image: advancedtelematic/tuf-keyserver:0.5.0-34-g0f489ef
+    image: advancedtelematic/tuf-keyserver:0.6.0-18-g5b8b259
     env_file:
       - ./.secrets
     environment:
@@ -76,7 +76,7 @@ services:
       - kafka
 
   tuf-reposerver:
-    image: advancedtelematic/tuf-reposerver:0.5.0-34-g0f489ef
+    image: advancedtelematic/tuf-reposerver:0.6.0-18-g5b8b259
     user: root
     env_file:
       - ./.secrets

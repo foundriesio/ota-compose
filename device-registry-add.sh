@@ -27,6 +27,7 @@ if [ -z "$INDOCKER" ] ; then
 	cat >device-registry-data.json <<EOF
 	{
 		"deviceUuid": "$DEVICE_UUID",
+		"uuid": "$DEVICE_UUID",
 		"deviceId": "$DEVICE_ID",
 		"deviceName": "$DEVICE_ID",
 		"deviceType": "Other",

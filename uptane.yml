@@ -2,7 +2,7 @@ version: '3'
 
 services:
   director-daemon:
-    image: advancedtelematic/director:0.6.3-2-g60998a6
+    image: advancedtelematic/director:0.7.0-7-g8cbbcc3
     env_file:
       - ./.secrets
     environment:
@@ -23,7 +23,7 @@ services:
       - tuf-keyserver
 
   director:
-    image: advancedtelematic/director:0.6.3-2-g60998a6
+    image: advancedtelematic/director:0.7.0-7-g8cbbcc3
     env_file:
       - ./.secrets
     environment:
@@ -44,10 +44,11 @@ services:
       - director-daemon
 
   device-registry:
-    image: advancedtelematic/device-registry:0.2.1-53-gd9c9366
+    image: advancedtelematic/device-registry:0.3.0-12-ga1ea92b
     env_file:
       - ./.secrets
     environment:
+      AUDITOR_MIGRATE: 'false'
       AUTH_PROTOCOL: none
       BIND_HOST: '0.0.0.0'
       BIND_PORT: '9001'
