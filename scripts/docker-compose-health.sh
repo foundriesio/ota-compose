@@ -10,7 +10,6 @@ if [ -z "$INDOCKER" ] ; then
 		--network ota-compose_default \
 		-v$this:$this \
 		-e INDOCKER=1 \
-		-e OSTREE_DATA=$OSTREE_DATA \
 		-e UPTANE=$UPTANE \
 		hub.foundries.io/aktualizr $this
 fi

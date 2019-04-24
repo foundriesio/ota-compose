@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 this=$(readlink -f $0)
-data="${CREDS_DATA-$(dirname $this)/creds-data}"
+data="${CREDS_DATA-$(dirname $this)/../creds-data}"
 
 if [ -z "$INDOCKER" ] ; then
 	echo "Calling via docker with proper tooling"

@@ -1,12 +1,12 @@
 #!/bin/sh -e
 
-here=$(dirname $(readlink -f $0))
+secrets="$(dirname $(readlink -f $0))/../.secrets"
 
 echo "=$(date) Initalizing docker-compose secrets"
 
-[ -f $here/.secrets ] && (echo "Secrets already defined at $here/.secrets"; exit 1)
+[ -f $secrets ] && (echo "Secrets already defined at $secrets"; exit 1)
 
-cat >$here/.secrets <<EOF
+cat >$secrets <<EOF
 # needed by mariadb container
 MYSQL_ROOT_PASSWORD=$(openssl rand -base64 16)
 
@@ -19,4 +19,4 @@ DB_PASSWORD=
 DB_ENCRYPTION_SALT=$(openssl rand -base64 8)
 DB_ENCRYPTION_PASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w64 | head -n1)
 EOF
-chmod 440 $here/.secrets
+chmod 440 $secrets

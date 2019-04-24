@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 this=$(readlink -f $0)
-data="${CREDS_DATA-$(dirname $this)/creds-data}"
+data="${CREDS_DATA-$(dirname $this)/../creds-data}"
 keys=$data/server_keys
 
 [ -d $keys ] && (echo "ERROR: Server keys already exist at $keys"; exit 1)
