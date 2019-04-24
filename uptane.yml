@@ -72,5 +72,21 @@ services:
     ports:
       - 8443:8443
     depends_on:
+      - device-registry
+      - director
+      - treehub
+      - tuf-reposerver
+
+  ota-api:
+    image: foundries/ota-api
+    environment:
+      DIRECTOR_URL: "http://director:9001"
+      REGISTRY_URL: "http://device-registry:9001"
+      REPO_URL: "http://tuf-reposerver:9001"
+    ports:
+      - 8888:8000
+    depends_on:
+      - device-registry
+      - director
       - treehub
       - tuf-reposerver
