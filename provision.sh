@@ -24,11 +24,11 @@ EOF
 fi
 chmod +x ./docker-compose.sh
 
-${here}/docker-compose.sh up &
+${here}/docker-compose.sh up -d
 
 while true; do
-	echo "= Waiting for OTA Connect to be ready"
-	sleep 30
+	echo "= Waiting for OTA Connect to be ready, streaming logs while waiting"
+	timeout 30s ./docker-compose.sh logs --tail 100 -f || true
 	${scripts}/docker-compose-health.sh && break
 done
 
