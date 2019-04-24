@@ -10,6 +10,7 @@ if [ -z "$INDOCKER" ] ; then
 		-v $this:$this \
 		-v $data:$data \
 		-e INDOCKER=1 \
+		-e UPTANE=$UPTANE \
 		-e CREDS_DATA=$data \
 		hub.foundries.io/aktualizr $this
 fi
@@ -23,12 +24,14 @@ function curl_() {
 	shift
 	curl -v $* >/tmp/resp 2>/tmp/errs || true
 	if ! grep "200 OK" /tmp/errs >/dev/null 2>&1 ; then
-		echo $error_msg
-		cat /tmp/errs | sed 's/^/|  /'
-		echo "|--"
-		cat /tmp/resp | sed 's/^/|  /'
-		echo "|--"
-		exit 1
+		if ! grep "201 Created" /tmp/errs >/dev/null 2>&1 ; then
+			echo $error_msg
+			cat /tmp/errs | sed 's/^/|  /'
+			echo "|--"
+			cat /tmp/resp | sed 's/^/|  /'
+			echo "|--"
+			exit 1
+		fi
 	fi
 }
 
@@ -38,7 +41,10 @@ id=$(cat /tmp/resp | tr -d  \")
 echo "=$(date) Namespace ID is $id"
 echo "default = $id" >> "$data/namespaces"
 
-[ -z $UPTANE ] || curl_ "Creating director repo" -d "${namespace}" http://director:9001/api/v1/admin/repo
+if [ -n "$UPTANE" ] ; then
+	echo "=$(date) Creating "default" namespace in director"
+	curl_ "Creating director repo" -d default http://director:9001/api/v1/admin/repo
+fi
 
 echo "=$(date) Waiting for keys"
 sleep 5
