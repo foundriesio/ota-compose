@@ -5,7 +5,7 @@ this=$(readlink -f $0)
 if ! which garage-push >/dev/null 2>&1; then
 	echo "Calling via docker with proper tooling"
 	exec docker run -it --rm \
-		--network ota-compose_default \
+		--network otacompose_default \
 		-v$this:$this \
 		hub.foundries.io/aktualizr $this
 fi

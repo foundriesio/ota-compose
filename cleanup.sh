@@ -2,9 +2,9 @@
 
 cd $(dirname $(readlink -f $0))
 
-docker-compose -f docker-compose.yml -f uptane.yml down
-docker volume rm ota-compose_ota-ce-db
-docker volume rm ota-compose_treehub-objects
-docker volume rm ota-compose_tuf-targets
+docker-compose -p otacompose -f docker-compose.yml -f uptane.yml down
+docker volume rm otacompose_ota-ce-db
+docker volume rm otacompose_treehub-objects
+docker volume rm otacompose_tuf-targets
 
 rm -f .secrets

@@ -7,7 +7,7 @@ this=$(readlink -f $0)
 if [ -z "$INDOCKER" ] ; then
 	echo "Calling via docker with proper tooling"
 	exec docker run -it --rm \
-		--network ota-compose_default \
+		--network otacompose_default \
 		-v$this:$this \
 		-e INDOCKER=1 \
 		-e UPTANE=$UPTANE \

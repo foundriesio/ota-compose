@@ -14,12 +14,12 @@ if [ -n "$UPTANE" ] ; then
 	./scripts/device-registry-initialize.sh
 	cat >$here/docker-compose.sh <<EOF
 #!/bin/sh -e
-exec docker-compose -f docker-compose.yml -f uptane.yml \$*
+exec docker-compose -p otacompose -f docker-compose.yml -f uptane.yml \$*
 EOF
 else
 	cat >$here/docker-compose.sh <<EOF
 #!/bin/sh -e
-exec docker-compose -f docker-compose.yml \$*
+exec docker-compose -p otacompose -f docker-compose.yml \$*
 EOF
 fi
 chmod +x ./docker-compose.sh
