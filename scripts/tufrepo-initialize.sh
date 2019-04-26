@@ -46,9 +46,22 @@ if [ -n "$UPTANE" ] ; then
 	curl_ "Creating director repo" -d default http://director:9001/api/v1/admin/repo
 fi
 
-echo "=$(date) Waiting for keys"
-sleep 5
-curl_ "Error finding TUF Keys:" http://tuf-keyserver:9001/api/v1/root/$id
+while true ; do
+	echo "=$(date) Waiting for keys"
+	sleep 5
+	curl -v http://tuf-keyserver:9001/api/v1/root/$id >/tmp/resp 2>/tmp/errs || true
+	if grep "200 OK" /tmp/errs >/dev/null 2>&1 ; then
+		break
+	fi
+	if ! grep "423 Locked" /tmp/errs >/dev/null 2>&1 ; then
+		echo "Error finding TUF keys:"
+		cat /tmp/errs | sed 's/^/|  /'
+		echo "|--"
+		cat /tmp/resp | sed 's/^/|  /'
+		echo "|--"
+		exit 1
+	fi
+done
 
 
 keys=$(curl  http://tuf-keyserver:9001/api/v1/root/$id/keys/targets/pairs)
