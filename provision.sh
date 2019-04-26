@@ -33,6 +33,7 @@ while true; do
 done
 
 echo "= Initializing TUF repo"
+[ -d ${CREDS_DATA} ] || mkdir -p ${CREDS_DATA}
 ${scripts}/tufrepo-initialize.sh
 ${CREDS_DATA}/mk-credentials-zip
 
