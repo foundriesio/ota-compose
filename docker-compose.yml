@@ -19,7 +19,7 @@ services:
       - ./ota-ce-initialize.sql:/docker-entrypoint-initdb.d/ota-ce-initialize.sql
 
   treehub:
-    image: advancedtelematic/treehub:0.1.27
+    image: advancedtelematic/treehub:0.1.27-20-g953fd9b
     user: root
     env_file:
       - ./.secrets
@@ -42,7 +42,7 @@ services:
       - kafka
 
   tuf-keyserver-daemon:
-    image: advancedtelematic/tuf-keyserver:0.6.0-18-g5b8b259
+    image: doanac/tuf-keyserver:0.6.0-19-ge074093
     env_file:
       - ./.secrets
     environment:
@@ -59,7 +59,7 @@ services:
       - kafka
 
   tuf-keyserver:
-    image: advancedtelematic/tuf-keyserver:0.6.0-18-g5b8b259
+    image: doanac/tuf-keyserver:0.6.0-19-ge074093
     env_file:
       - ./.secrets
     environment:
@@ -76,7 +76,7 @@ services:
       - kafka
 
   tuf-reposerver:
-    image: advancedtelematic/tuf-reposerver:0.6.0-18-g5b8b259
+    image: doanac/tuf-reposerver:0.6.0-19-ge074093
     user: root
     env_file:
       - ./.secrets
