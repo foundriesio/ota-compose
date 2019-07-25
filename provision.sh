@@ -26,11 +26,14 @@ chmod +x ./docker-compose.sh
 
 ${here}/docker-compose.sh up -d
 
+echo "= Waiting for OTA Connect to be ready, streaming logs while waiting"
+./docker-compose.sh logs -f &
+pid=$!
 while true; do
-	echo "= Waiting for OTA Connect to be ready, streaming logs while waiting"
-	timeout 30s ./docker-compose.sh logs --tail 100 -f || true
+	sleep 30s
 	${scripts}/docker-compose-health.sh && break
 done
+kill $pid
 
 echo "= Initializing TUF repo"
 [ -d ${CREDS_DATA} ] || mkdir -p ${CREDS_DATA}
