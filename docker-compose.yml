@@ -1,10 +1,5 @@
 version: '3'
 
-volumes:
-  ota-ce-db:
-  treehub-objects:
-  tuf-targets:
-
 services:
   kafka:
     image: spotify/kafka
@@ -15,7 +10,7 @@ services:
     env_file:
       - ./.secrets
     volumes:
-      - ota-ce-db:/var/lib/mysql
+      - ./data/ota-ce-db:/var/lib/mysql
       - ./ota-ce-initialize.sql:/docker-entrypoint-initdb.d/ota-ce-initialize.sql
 
   treehub:
@@ -32,7 +27,7 @@ services:
       TREEHUB_LOCAL_STORE_PATH: "/treehub-objects"
       TREEHUB_STORAGE: local
     volumes:
-      - treehub-objects:/treehub-objects/object-storage
+      - ./data/treehub-objects:/treehub-objects/object-storage
       - ./wait-for:/wait-for
       - ./treehub-run.sh:/run.sh
     command: "/wait-for ota-ce-db:3306 -- /run.sh"
@@ -93,7 +88,7 @@ services:
       TUF_REPOSERVER_SIZE_LIMIT: "536870912"
     volumes:
       - ./wait-for:/wait-for
-      - tuf-targets:/tuf-targets
+      - ./data/tuf-targets:/tuf-targets
 
     command: "/wait-for ota-ce-db:3306 -- /opt/reposerver/bin/reposerver"
     entrypoint: ""
