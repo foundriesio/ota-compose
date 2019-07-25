@@ -90,3 +90,59 @@ services:
       - director
       - treehub
       - tuf-reposerver
+
+  web-events:
+    image: advancedtelematic/web-events:0.0.23-2-gf996baa
+    environment:
+      KAFKA_HOST: kafka:9092
+      REPORT_METRICS: "false"
+      AUTH_PROTOCOL: none
+      AUTH_VERIFICATION: local
+      BIND_HOST: 0.0.0.0
+      BIND_PORT: '9001'
+      PACKAGES_VERSION_FORMAT: ".+"
+    ports:
+      - 9001:9001
+
+  ui:
+    image: advancedtelematic/ota-plus-web:1.1.0-74-g5258b23
+    command: "-Dwebsrc.atsgarage=ws://*:80"
+    env_file:
+      - ./.secrets
+    environment:
+      KAFKA_HOST: kafka:9092
+      REPORT_METRICS: "false"
+      BIND_HOST: 0.0.0.0
+
+      AUTH_PROTOCOL: none
+      AUTH_VERIFICATION: local
+      AUTH_PLUS_HOST: auth-plus
+
+      CAMPAIGNER_HOST: campaigner
+      CAMPAIGNER_PORT: '9001'
+      DEVICE_REGISTRY_HOST: device-registry
+      DEVICE_REGISTRY_PORT: '9001'
+      DIRECTOR_HOST: director
+      DIRECTOR_PORT: '9001'
+      TUF_REPOSERVER_HOST: tuf-reposerver
+      TUF_REPOSERVER_PORT: '9001'
+
+      OIDC_LOGIN_ACTION: com.advancedtelematic.auth.garage.NoLoginAction
+      OIDC_LOGOUT_ACTION: com.advancedtelematic.auth.garage.NoLogoutAction
+      OIDC_NS_PROVIDER: com.advancedtelematic.auth.oidc.ConfiguredNamespace
+      OIDC_TOKEN_EXCHANGE: com.advancedtelematic.auth.NoExchange
+      OIDC_TOKEN_VERIFICATION: com.advancedtelematic.auth.oidc.TokenValidityCheck
+
+      PLAY_HTTP_SESSION_SECURE: 'false'
+      TOGGLE_AUTO_FEATURE_ACTIVATION: "false"
+      TOGGLE_CREDENTIALS_DOWNLOAD: "false"
+      TOGGLE_PREBUILT_DEBRPM: "false"
+      TOGGLE_USER_PROFILE_MENU: "false"
+
+      WS_HOST: localhost
+      WS_PORT: '9001'
+      WS_SCHEME: ws
+
+    depends_on:
+      - device-registry
+      - web-events

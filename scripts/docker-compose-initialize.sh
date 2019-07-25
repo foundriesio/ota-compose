@@ -18,5 +18,9 @@ DB_PASSWORD=
 # used by tuf-keyserver
 DB_ENCRYPTION_SALT=$(openssl rand -base64 8)
 DB_ENCRYPTION_PASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w64 | head -n1)
+
+# used by web ui if enabled
+JWT_SECRET=$(openssl rand -base64 32)
+PLAY_CRYPTO_SECRET=$(openssl rand -base64 32)
 EOF
 chmod 440 $secrets
